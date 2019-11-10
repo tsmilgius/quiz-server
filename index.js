@@ -5,7 +5,7 @@ const moment = require('moment');
 const connectionString =
   "mongodb+srv://tsmilgius:E58-Qegqddf$KdW@peritoneal-39kmv.mongodb.net/test?retryWrites=true&w=majority";
 
-mongoose.connect(connectionString, { useNewUrlParser: true, useUnifiedTopology: true, });
+mongoose.connect(connectionString, { useNewUrlParser: true });
 
 const Therapy = mongoose.model('Therapy', {
   cycles: Number,
