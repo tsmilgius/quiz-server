@@ -7,83 +7,80 @@ const connectionString =
 
 mongoose.connect(connectionString, { useNewUrlParser: true });
 
-const Therapy = mongoose.model('Therapy', {
-  cycles: Number,
-  fillVolume: Number,
-  dwellTime: Number,
-  lastFillVolume: Number,
-  totalTime: Number,
-  startDate: String,
-  ultrafiltration: Number,
-  bags: Array
+/*{
+"category": "History",
+"type": "multiple",
+"difficulty": "easy",
+"question": "Which German field marshal was known as the `Desert Fox`?",
+"correct_answer": "Erwin Rommel",
+"incorrect_answers": [
+"Ernst Busch",
+"Wolfram Freiherr von Richthofen",
+"Wilhelm List"
+]
+},
+*/
+
+const Question = mongoose.model("Questions", {
+  category: String,
+  question: String,
+  correctAnswer: String,
+  language: String,
+  incorrectAnswers: Array,
+  addedDate: String
 });
 
 const typeDefs = `
   type Query {
-    therapies: [Therapy]
+    questions: [Question]
   }
 
-  type Therapy {
-      id: ID!
-      cycles: Int
-      fillVolume: Int
-      dwellTime: Int
-      lastFillVolume: Int
-      totalTime: Int
-      startDate: String
-      ultrafiltration: Int
-      bags: [Float]
-      
+  type Question {
+    id: ID!
+    category: String
+    question: String
+    correctAnswer: String
+    language: String
+    incorrectAnswers: [String]
+    addedDate: String 
   }
 
   type Mutation {
-    createTherapy(
-      cycles: Int!
-      fillVolume: Int!
-      dwellTime: Int!
-      lastFillVolume: Int!
-      totalTime: Int
-      ultrafiltration: Int
-      bags: [Float] ): Therapy
-    removeTherapy(id: ID!): Boolean
+    createQuestion(
+      category: String
+      question: String
+      correctAnswer: String
+      language: String
+      incorrectAnswers: [String]
+      addedDate: String): Question
+    removeQuestion(id: ID!): Boolean
   }
-    
 `;
 
 const resolvers = {
   Query: {
-    therapies: () => Therapy.find()
+    questions: () => Question.find()
   },
   Mutation: {
-    createTherapy: async (
+    createQuestion: async (
       _,
-      {
-        cycles,
-        fillVolume,
-        dwellTime,
-        lastFillVolume,
-        totalTime,
-        ultrafiltration,
-        bags
-      }
+      { category, question, correctAnswer, language, incorrectAnswers }
     ) => {
-      const therapy = new Therapy({
-        cycles,
-        fillVolume,
-        dwellTime,
-        lastFillVolume,
-        totalTime,
-        startDate: moment()
+      const askedQuestion = new Question({
+        category,
+        question,
+        correctAnswer,
+        language,
+        incorrectAnswers,
+        addedDate: moment()
           .utc()
-          .format(),
-        ultrafiltration,
-        bags
+          .format()
       });
-      await therapy.save();
-      return therapy;
+      await askedQuestion.save();
+      return askedQuestion;
     },
-    removeTherapy: async (_, { id }) => {
-      await Therapy.findByIdAndRemove(id);
+    removeQuestion: async (_, { id }) => {
+      await Question.findByIdAndRemove(id);
       return true;
     }
   }
