@@ -7,20 +7,6 @@ const connectionString =
 
 mongoose.connect(connectionString, { useNewUrlParser: true });
 
-/*{
-"category": "History",
-"type": "multiple",
-"difficulty": "easy",
-"question": "Which German field marshal was known as the `Desert Fox`?",
-"correct_answer": "Erwin Rommel",
-"incorrect_answers": [
-"Ernst Busch",
-"Wolfram Freiherr von Richthofen",
-"Wilhelm List"
-]
-},
-*/
-
 const Question = mongoose.model("Questions", {
   category: String,
   question: String,
