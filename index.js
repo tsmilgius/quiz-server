@@ -2,8 +2,7 @@ const { GraphQLServer } = require('graphql-yoga');
 const mongoose = require('mongoose');
 const moment = require('moment');
 
-const connectionString =
-  "mongodb+srv://tsmilgius:E58-Qegqddf$KdW@peritoneal-39kmv.mongodb.net/test?retryWrites=true&w=majority";
+const connectionString = mongodbConnectionString;
 
 mongoose.connect(connectionString, { useNewUrlParser: true });
 
